@@ -1,0 +1,32 @@
+
+version: '3.8' # OK: Versão do Docker Compose
+
+services:
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack_main # CORREÇÃO: Usando 'localstack_main' para consistência
+    
+    ports: # CORREÇÃO: A chave deve ser 'ports:', não apenas 'ports'
+      - "127.0.0.1:4566:4566" # Porta principal da API (todos os serviços)
+      - "127.0.0.1:8080:8080" # Porta para o Dashboard Web (opcional)
+      
+    environment:
+      # CRUCIAL: Lista COMPLETA de serviços para o seu projeto (S3, Lambda, DynamoDB, API Gateway, IAM)
+      - SERVICES=s3,lambda,dynamodb,iam,apigateway
+      - DEBUG=1 
+      - START_WEB=1 # Habilita o dashboard web
+      
+      # Credenciais FALSAS (necessárias para o AWS CLI)
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=us-east-1
+
+      # Configurações de volume/limpeza (mantendo suas otimizações)
+      - DIRS_CLEANUP_EXCLUDE=/tmp/localstack
+      
+    volumes:
+      # Permite a emulação de Lambdas via Docker
+      - "/var/run/docker.sock:/var/run/docker.sock" 
+      
+      # Monta um volume para persistência de dados (Boa Prática)
+      - "./.localstack:/var/lib/localstack"

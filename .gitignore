@@ -1,0 +1,10 @@
+# Arquivos Gerados
+*.zip
+lambda_function.zip
+
+# Pastas de Persistência (Pode ser localstack/ ou .localstack/)
+localstack/
+.localstack/
+
+# Binário de Instalação (se for o caso)
+LocalStack-Desktop-community*
